@@ -27,7 +27,7 @@
 
                 <div class="table table-responsive">
                     <table class="table">
-                        <thead class="thead-dark">
+                        <thead class="thead-dark text-center">
                             <tr>
                                 <th>Editar</th>
                                 <th>Eliminar</th>
@@ -41,12 +41,13 @@
                                 <th>Departamento</th>
                                 <th>SalarioBase</th>
                                 <th>No. Faltas</th>
+                                <th>Imagen</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (ML.Empleado empleado in Model.Empleados)
                             {
-                                <tr>
+                                <tr class="text-center">
                                     <td>
                                         <div class="row">
                                             <div class="col-md-auto">
@@ -62,7 +63,7 @@
                                     </td>
                                     <td>
                                         <div class="row">
-                                            <div class="col-md-auto">
+                                            @* <div class="col-md-auto">
                                                 <button type="button" class="btn btn-outline-danger d-flex align-items-center p-2" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="EmpleadoDelete(@empleado.IdEmpleado, '@empleado.Nombre')">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash me-2" viewBox="0 0 16 16">
                                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
@@ -70,11 +71,12 @@
                                                     </svg>
                                                     Eliminar
                                                 </button>
-                                            </div>
+                                            </div> *@
+                                            <a href="@Url.Action("Delete","Empleado", new {IdEmpleado = empleado.IdEmpleado})" class="btn btn-outline-danger" 
+                                                onclick="return confirm('¿Estás seguro de eliminar el empleado: ' + ' @empleado.Nombre' + ' @empleado.ApellidoPaterno' + ' @empleado.ApellidoMaterno' + '?')">
+                                                Eliminar
+                                            </a>
                                         </div>
-                                        @*<a href="@Url.Action("Delete","Usuario", new {IdUsuario = usuario.IdUsuario})" class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar el usuario: '+ '@usuario.Nombre')">
-                                Eliminar
-                                </a>*@
                                     </td>
                                     <td>@empleado.IdEmpleado</td>
                                     <td>@empleado.Nombre @empleado.ApellidoPaterno @empleado.ApellidoMaterno</td>
@@ -86,6 +88,9 @@
                                     <td>@empleado.Departamento.Descripcion</td>
                                     <td>@empleado.SalarioBase</td>
                                     <td>@empleado.NoFaltas</td>
+                                    <td>
+                                        <img src="data:image/*;base64,@Convert.ToBase64String(@empleado.Imagen)" width="150px" height="150px" />
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -98,6 +103,25 @@
                     No existen registros para la tabla Usuario. Error: @ViewBag.Message
                 </div>
             }
+        </div>
+    </div>
+</div>
+
+<!-- Modal Eliminar Empleado-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Eliminar Empleado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estas seguro que deseas eliminar al empleado: <span id="Nombre"></span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <a id="btnEliminarEmpleado" href="" class="btn btn-danger">Eliminar</a> <!--Con mi id, referencio mi boton-->
+            </div>
         </div>
     </div>
 </div>

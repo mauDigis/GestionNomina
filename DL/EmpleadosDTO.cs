@@ -24,6 +24,7 @@ namespace DL
         public int IdDepartamento { get; set; }
         public decimal? SalarioBase { get; set; }
         public byte? NoFaltas { get; set; }
+        public byte[] Imagen { get; set; }
         public string? Descripcion { get; set; }
     }
 }

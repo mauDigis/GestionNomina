@@ -1,0 +1,114 @@
+﻿@model ML.Empleado
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        @using (Html.BeginForm("Form", "Empleado", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="col-md-12">
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h2 class="display-3">Formulario de Empleados</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+
+                                @Html.HiddenFor(model => model.IdEmpleado)
+
+                                @Html.LabelFor(model => model.Nombre, new { @class = "form-label  fw-bold", @id = "lblNombre" })
+                                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control ", @id = "txtNombre" })
+                            </div>
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.ApellidoPaterno, new { @class = "form-label fw-bold", @id = "lblApellidoPaterno" })
+                                @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control", @id = "txtApellidoPaterno" })
+                            </div>
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.ApellidoMaterno, new { @class = "form-label fw-bold", @id = "lblApellidoMaterno" })
+                                @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control", @id = "txtApellidoMaterno" })
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.FechaNacimiento, new { @class = "form-label  fw-bold", @id = "lblFechaNacimiento" })
+                                @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control ", @id = "txtFechaNacimiento" })
+                            </div>
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.RFC, new { @class = "form-label fw-bold", @id = "lblRFC" })
+                                @Html.TextBoxFor(model => model.RFC, new { @class = "form-control", @id = "txtRFC" })
+                            </div>
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.NSS, new { @class = "form-label fw-bold", @id = "lblNSS" })
+                                @Html.TextBoxFor(model => model.NSS, new { @class = "form-control", @id = "txtNSS" })
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.CURP, new { @class = "form-label  fw-bold", @id = "lblCURP" })
+                                @Html.TextBoxFor(model => model.CURP, new { @class = "form-control ", @id = "txtCURP" })
+                            </div>
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.FechaIngreso, new { @class = "form-label fw-bold", @id = "lblFechaIngreso" })
+                                @Html.TextBoxFor(model => model.FechaIngreso, new { @class = "form-control", @id = "txtFechaIngreso" })
+                            </div>
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.Departamento.IdDepartamento, new { @class = "form-label fw-bold", @id = "lblNSS" })
+                                @Html.TextBoxFor(model => model.Departamento.IdDepartamento, new { @class = "form-control", @id = "txtNSS" })
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                @Html.LabelFor(model => model.SalarioBase, new { @class = "form-label  fw-bold", @id = "lblSalarioBase" })
+                                @Html.TextBoxFor(model => model.SalarioBase, new { @class = "form-control ", @id = "txtSalarioBase" })
+                            </div>
+                            <div class="col-md-6">
+                                @Html.LabelFor(model => model.NoFaltas, new { @class = "form-label fw-bold", @id = "lblNoFaltas" })
+                                @Html.TextBoxFor(model => model.NoFaltas, new { @class = "form-control", @id = "txtNoFaltas" })
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="input-group mx-auto" style="width: fit-content;">
+                                    <input type="file" class="form-control mt-4" name="ImageFile" onchange="PrevisualizarImagen(event)">
+                                </div>
+                            </div> 
+                            <div class="col-md-6">
+                                @{
+                                    //Defino el origen de la imagen
+                                    string imagenSrc;
+
+                                    if (Model.Imagen != null && Model.Imagen.Length > 0)
+                                    {
+                                        //Si existe una imagen
+                                        imagenSrc = $"data:image/*;base64,{Convert.ToBase64String(Model.Imagen)}";
+                                    }
+                                    else
+                                    {
+                                        // Si no hay imagen en la BD, se usa la imagen por defecto
+                                        imagenSrc = Url.Content("~/Img/NoPhoto.png");
+                                    }
+                                }
+
+                                <img class="mt-4 rounded d-block mx-auto" src="@imagenSrc" id="imgUsuario" width="150px" height="150px" />
+
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-12"> 
+                                <button class="btn btn-outline-success" type="submit">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        @Html.ActionLink("Regresar", "GetAll", "Empleado", new { @class = "btn btn-outline-danger m-2 px-4 py-2" })
+                    </div>
+                </div>
+            </div>
+        }
+    </div><!--Row-->
+</div><!--Container-->
+
+<script type="text/javascript" src="~/js/Empleado.js"></script>

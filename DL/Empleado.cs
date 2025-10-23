@@ -29,5 +29,7 @@ public partial class Empleado
 
     public byte? NoFaltas { get; set; }
 
+    public byte[]? Imagen { get; set; }
+
     public virtual Departamento? IdDepartamentoNavigation { get; set; }
 }

@@ -14,6 +14,7 @@
         public Departamento? Departamento { get; set; }
         public decimal? SalarioBase { get; set; }
         public byte? NoFaltas { get; set; }
+        public byte[] Imagen { get; set; }
         public List<object>? Empleados { get; set; }
     }
 }
