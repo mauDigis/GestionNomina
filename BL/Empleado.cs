@@ -44,6 +44,12 @@ namespace BL
                             empleadoML.NoFaltas = empleadoObj.NoFaltas;
                             empleadoML.Imagen = empleadoObj.Imagen;
 
+                            if (empleadoObj.Imagen != null && empleadoObj.Imagen.Length > 0)
+                            {
+                                // Convierte el byte[] (empleadoObj.Imagen) a string Base64.
+                                empleadoML.Imagen64 = Convert.ToBase64String(empleadoObj.Imagen);
+                            }
+
                             resultGetAll.Objects.Add(empleadoML);
                         }
 

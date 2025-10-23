@@ -35,6 +35,10 @@
                             <div class="col-md-4">
                                 @Html.LabelFor(model => model.FechaNacimiento, new { @class = "form-label  fw-bold", @id = "lblFechaNacimiento" })
                                 @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control ", @id = "txtFechaNacimiento" })
+
+                                <div id="" class="form-text">
+                                    Formato de Fecha 12-09-2025
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 @Html.LabelFor(model => model.RFC, new { @class = "form-label fw-bold", @id = "lblRFC" })
@@ -53,6 +57,9 @@
                             <div class="col-md-4">
                                 @Html.LabelFor(model => model.FechaIngreso, new { @class = "form-label fw-bold", @id = "lblFechaIngreso" })
                                 @Html.TextBoxFor(model => model.FechaIngreso, new { @class = "form-control", @id = "txtFechaIngreso" })
+                                <div id="" class="form-text">
+                                    Formato de Fecha 12-09-2025
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 @Html.LabelFor(model => model.Departamento.IdDepartamento, new { @class = "form-label fw-bold", @id = "lblNSS" })

@@ -5,7 +5,22 @@ namespace SL
     {
         public static void Main(string[] args)
         {
+            //Variable para idenificar mi cors(Id)
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
             var builder = WebApplication.CreateBuilder(args);
+
+            //Configuración de CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("http://localhost:5201")
+                                                        .AllowAnyHeader()
+                                                        .AllowAnyMethod();
+                                  });
+            });
 
             // Add services to the container.
 
@@ -23,8 +38,10 @@ namespace SL
                 app.UseSwaggerUI();
             }
 
-            app.UseAuthorization();
+            //Configuración para usar CORS
+            app.UseCors(MyAllowSpecificOrigins);
 
+            app.UseAuthorization();
 
             app.MapControllers();
 

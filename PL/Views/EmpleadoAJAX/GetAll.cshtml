@@ -1,8 +1,43 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "GetAll";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>GetAll</h1>
+<h1 class="display-4 text-center">GetAll AJAX</h1>
 
+<div class="container">
+    <div class="row text-center">
+        <div class="table-responsive">
+            <table class="table" id="tableEmployees">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>IdEmpleado</th>
+                        <th>Nombre Completo</th>
+                        <th>Fecha Nacimiento</th>
+                        <th>RFC</th>
+                        <th>NSS</th>
+                        <th>CURP</th>
+                        <th>Fecha Ingreso</th>
+                        <th>Departamento</th>
+                        <th>Salario Base</th>
+                        <th>No. Faltas</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <!--Datos insertados dinamicamente por las peticiones AJAX-->
+
+                </tbody>
+                <tfoot>
+
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="~/js/Empleado.js"></script>
