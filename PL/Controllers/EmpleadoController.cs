@@ -6,7 +6,6 @@ namespace PL.Controllers
     {
         private readonly IWebHostEnvironment _env;
 
-        // 2. Constructor para realizar la inyección de dependencias
         public EmpleadoController(IWebHostEnvironment env)
         {
             _env = env;
@@ -63,6 +62,15 @@ namespace PL.Controllers
         [HttpPost]
         public IActionResult Form(ML.Empleado empleado, IFormFile ImageFile)
         {
+            ML.Empleado empleadoExistente = BL.Empleado.GetByIdImagen(empleado.IdEmpleado.Value);
+
+            byte[] imagenActual = null;
+
+            if(empleadoExistente.Imagen != null)
+            {
+                imagenActual = empleadoExistente.Imagen;
+            }
+            
             // Verificar si se subió un archivo
             if (ImageFile != null)
             {
@@ -75,14 +83,21 @@ namespace PL.Controllers
             }
             else
             {
-                //Obtengo la ruta de mi imagen por defecto.
-                var webRootPath = _env.ContentRootPath; 
-                var defaultImagePath = Path.Combine(webRootPath, "wwwroot", "Img", "NoPhoto.png");
-
-                if (System.IO.File.Exists(defaultImagePath))
+                if (imagenActual != null)
                 {
-                    // Leer el archivo de imagen por defecto y convertirlo a byte[]
-                    empleado.Imagen = System.IO.File.ReadAllBytes(defaultImagePath);
+                    empleado.Imagen = imagenActual;
+                }
+                else
+                { 
+                    //Obtengo la ruta de mi imagen por defecto.
+                    var webRootPath = _env.ContentRootPath;
+                    var defaultImagePath = Path.Combine(webRootPath, "wwwroot", "Img", "NoPhoto.png");
+
+                    if (System.IO.File.Exists(defaultImagePath))
+                    {
+                        // Leer el archivo de imagen por defecto y convertirlo a byte[]
+                        empleado.Imagen = System.IO.File.ReadAllBytes(defaultImagePath);
+                    }
                 }
             }
 

@@ -17,7 +17,7 @@
                         <div class="row">
                             <div class="col-md-4">
 
-                                @Html.HiddenFor(model => model.IdEmpleado)
+                                @Html.HiddenFor(model => model.IdEmpleado, new { @id = "IdEmpleado" })
 
                                 @Html.LabelFor(model => model.Nombre, new { @class = "form-label  fw-bold", @id = "lblNombre" })
                                 @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control ", @id = "txtNombre" })
@@ -62,8 +62,8 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                @Html.LabelFor(model => model.Departamento.IdDepartamento, new { @class = "form-label fw-bold", @id = "lblNSS" })
-                                @Html.TextBoxFor(model => model.Departamento.IdDepartamento, new { @class = "form-control", @id = "txtNSS" })
+                                @Html.LabelFor(model => model.Departamento.IdDepartamento, new { @class = "form-label fw-bold", @id = "lblIdDepartamento" })
+                                @Html.TextBoxFor(model => model.Departamento.IdDepartamento, new { @class = "form-control", @id = "txtIdDepartamento" })
                             </div>
                         </div>
                         <div class="row mt-4">

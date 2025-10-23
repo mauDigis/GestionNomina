@@ -121,6 +121,12 @@ namespace BL
                         empleadoML.NoFaltas = queryGetEmpleado.NoFaltas;
                         empleadoML.Imagen = queryGetEmpleado.Imagen;
 
+                        if (queryGetEmpleado.Imagen != null && queryGetEmpleado.Imagen.Length > 0)
+                        {
+                            // Convierte el byte[] (empleadoObj.Imagen) a string Base64.
+                            empleadoML.Imagen64 = Convert.ToBase64String(queryGetEmpleado.Imagen);
+                        }
+
                         resultGetById.Object = empleadoML;
 
                         if (resultGetById.Object != null)
@@ -443,5 +449,46 @@ namespace BL
 
         #endregion
 
+        #region MÉTODOS DE IMAGEN
+
+        public static ML.Empleado GetByIdImagen(int IdEmpleado)
+        {
+            ML.Empleado empleadoML = new ML.Empleado();
+
+            try
+            {
+                using (DL.GestionNominaContext context = new DL.GestionNominaContext())
+                {
+                    var queryGetImagenEmpleo = (from EmpleadoDb in context.Empleados
+                                            join DepartamentoDb in context.Departamentos on EmpleadoDb.IdDepartamento equals DepartamentoDb.IdDepartamento
+                                            where EmpleadoDb.IdEmpleado == IdEmpleado
+                                            select new
+                                            {
+                                                EmpleadoDb.Imagen,
+                                            }).SingleOrDefault();
+
+                    if (queryGetImagenEmpleo != null)
+                    {
+                        empleadoML.Imagen = queryGetImagenEmpleo.Imagen;
+
+                        if (empleadoML != null)
+                        {
+                            return empleadoML;
+                        }
+                    }
+                    else
+                    {
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            return empleadoML;
+        }
+
+        #endregion
     }
 }
