@@ -1,0 +1,94 @@
+﻿@model ML.Permiso
+@{
+    ViewData["Title"] = "SolicitudForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/jquery-ui.css" />
+
+<h1>Solicitud de Permisos</h1>
+
+<div class="container">
+    <div class="row mt-4">
+        @using (Html.BeginForm("SolicitudForm", "Permisos", FormMethod.Post))
+        {
+            <div class="row">
+                @Html.HiddenFor(model => model.IdPermiso, new { @id = "IdPermiso" })
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 text-center">
+                            @Html.LabelFor(model => model.FechaInicio, new { @class = "form-label fw-bold" })
+                            <span class="fw-bold fs-4">*</span>
+                            @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control text-center fecha-permiso", @id = "txtFechaInicio" })
+                        </div>
+                        <div class="col-md-6 mb-3 text-center">
+                            @Html.LabelFor(model => model.FechaFin, new { @class = "form-label fw-bold" })
+                            <span class="fw-bold fs-4">*</span>
+                            @Html.TextBoxFor(model => model.FechaFin, new { @class = "form-control text-center fecha-permiso", @id = "txtFechaFin" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3 text-center">
+                            @Html.LabelFor(model => model.HoraInicio, new { @class = "form-label fw-bold" })
+                            <span class="fw-bold fs-4">*</span>
+                            @Html.TextBoxFor(model => model.HoraInicio, new { @class = "form-control text-center", Type = "time", @id = "txtHoraInicio" })
+                        </div>
+                        <div class="col-md-6 mb-3 text-center">
+                            @Html.LabelFor(model => model.HoraFin, new { @class = "form-label fw-bold" })
+                            <span class="fw-bold fs-4">*</span>
+                            @Html.TextBoxFor(model => model.HoraFin, new { @class = "form-control text-center", Type = "time", @id = "txtHoraFin" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3 text-center">
+                    @Html.LabelFor(model => model.Motivo, new { @class = "form-label fw-bold" })
+                    <span class="fw-bold fs-4">*</span>
+                    @Html.TextAreaFor(model => model.Motivo, 5, 20, new // Usa TextAreaFor
+                        {
+                            @class = "form-control",
+                            @id = "txtMotivo",
+                        })
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button class="btn btn-outline-primary w-100" type="submit">Generar Solicitud</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery-ui.js"></script>
+
+<script type="text/javascript">
+
+    DatePicker();
+
+    function DatePicker() {
+        $(".fecha-datepicker").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-100:+1", // Permite seleccionar años desde hace 100 años hasta el presente
+            maxDate: 0 // La fecha máxima es el día actual
+        });
+
+        $(".fecha-datepicker").prop("readonly", true); // Solo lectura
+
+        //Sin limitacion
+        $(".fecha-permiso").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-100:+1", // Permite seleccionar años desde hace 100 años hasta el presente
+        });
+
+        $(".fecha-permiso").prop("readonly", true);
+    }
+</script>

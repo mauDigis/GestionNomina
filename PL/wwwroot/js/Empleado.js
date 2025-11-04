@@ -31,6 +31,29 @@ $(document).ready(function () { //click
     GetAll();
 });
 
+function SaveEmpleado() {
+    IdEmpleado = $("#IdEmpleado").val();
+
+    console.log("Entro al SaveProduct");
+    console.log(IdEmpleado)
+    if (IdEmpleado < 1) {
+        AddEmpleado();
+    } else {
+        UpdateEmpleado();
+    }
+}
+
+function SelectEmpleado(IdEmpleado) {
+
+    console.log("Entro al SelectEmpleado");
+    console.log(IdEmpleado)
+
+    if (IdEmpleado > 0) {
+        GetById(IdEmpleado);
+    } else {
+
+    }
+}
 function GetAll() {
     console.log('Hola Js');
 
@@ -67,7 +90,7 @@ function GetAll() {
                     "<td class='text-center'>" + employees.departamento.descripcion + "</td>" +
                     "<td class='text-center'>" + employees.salarioBase + "</td>" +
                     "<td class='text-center'>" + employees.noFaltas + "</td>" +
-                    "<td>" + "<button class='btn btn-warning' onclick='SelectProduct(" + employees.idEmpleado + ")' >" + "<img src='../pencil-square.svg'>" + "</img>" + 'Editar' + "</button>" + "</td>" +
+                    "<td>" + "<button class='btn btn-warning' onclick='SelectEmpleado(" + employees.idEmpleado + ")' >" + "<img src='../pencil-square.svg'>" + "</img>" + 'Editar' + "</button>" + "</td>" +
                     "<td>" + "<button class='btn btn-danger deletebtn' >" + "<img src='../trash.svg'>" + "</img>" + 'Eliminar' + "</button>" + "</td>" +
 
                     "</tr>";
@@ -80,17 +103,6 @@ function GetAll() {
             alert('Error en la consulta.' + result.ErrorMessage);
         }
     });
-}
-
-function SelectProduct(IdEmpleado) {
-    //ProductID = $("#ProductID").val();
-
-    console.log("Entro al SelectProduct");
-    console.log(IdEmpleado)
-    if (IdEmpleado > 0) {
-        GetById(IdEmpleado);
-    } else {
-    }
 }
 
 //Peticíón GetById
@@ -107,22 +119,18 @@ function GetById(IdEmpleado) {
             console.log(result);
             console.log('objects' + result.object);
 
-            const userData = result.object;
-            console.log(userData.productID);
+            const empleadoData = result.object;
+            console.log(empleadoData.idEmpleado);
 
-            if (userData) {
+            if (empleadoData) {
                 //Manda a llamar mi método y paso los datos.
-                cargarDatosFormulario(userData);
+                cargarDatosFormulario(empleadoData);
 
-                //Defino la ruta base del controlador/acción
-                var controlador = "Empleado";
-                var accion = "Form";
+                //Guardo mi modal en una variable.
+                const modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
 
-                // 2. Construir la URL completa
-                var urlRedireccion = "/" + controlador + "/" + accion + "?IdEmpleado=" + IdEmpleado;
-
-                // 3. Redirecciona el navegador
-                window.location.href = urlRedireccion;
+                //Lo muestro ya con los datos cargados.
+                modal.show();
 
                 console.log('Datos cargados en el formulario.');
             } else {
@@ -134,6 +142,127 @@ function GetById(IdEmpleado) {
         }
     });
 }; //GetById
+
+//Petición Add
+function AddEmpleado() {
+
+    //Conversion de imagen
+    manejarImagenYContinuar(function (imagenBase64String) {
+
+        //Mi json debe ser igual al Modelo que recibe mi servicio.
+
+        var empleado = {
+            idEmpleado: 0,
+            nombre: $('#txtNombre').val(),
+            apellidoPaterno: $('#txtApellidoPaterno').val(),
+            apellidoMaterno: $('#txtApellidoMaterno').val(),
+            fechaNacimiento: $('#txtFechaNacimiento').val(),
+            rfc: $('#txtRFC').val(),
+            nss: $('#txtNSS').val(),
+            curp: $('#txtCURP').val(),
+            fechaIngreso: $('#txtFechaIngreso').val(),
+            departamento: {
+                idDepartamento: parseInt($('#txtIdDepartamento').val()),
+                "descripcion": "",
+                "departamentos": []
+            },
+            salarioBase: parseFloat($('#txtSalarioBase').val()),
+            noFaltas: parseInt($('#txtNoFaltas').val()),
+            imagen: null,
+            imagen64: imagenBase64String,
+            empleados: []
+        };
+
+    });
+
+    console.log("JSON ENVIADO:", empleado);
+
+    $.ajax({
+        type: 'POST',
+        url: 'http://localhost:5186/api/EmpleadoAPI/Add',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(empleado),
+        success: function (result) { //200 OK
+            console.log('Entro al success');
+            console.log(result);
+
+            if (result.correct === true) {
+                alert('Se agrego exitosamente el empleado.');
+
+                //Eliminar datos del formulario
+                eliminarDatosFormulario();
+
+                GetAll();
+            }
+
+        },
+        error: function (result) {
+            alert('Error al agregar el empleado.' + result.ErrorMessage);
+        }
+    });
+
+}; //AddEmpleado
+
+//Petición Update
+function UpdateEmpleado() {
+
+    //Mi json debe ser igual al Modelo que recibe mi servicio.
+
+    var empleado = {
+        idEmpleado: parseInt($('#IdEmpleado').val()),
+        nombre: $('#txtNombre').val(),
+        apellidoPaterno: $('#txtApellidoPaterno').val(),
+        apellidoMaterno: $('#txtApellidoMaterno').val(),
+        fechaNacimiento: $('#txtFechaNacimiento').val(),
+        rfc: $('#txtRFC').val(),
+        nss: $('#txtNSS').val(),
+        curp: $('#txtCURP').val(),
+        fechaIngreso: $('#txtFechaIngreso').val(),
+        departamento: {
+            idDepartamento: parseInt($('#txtIdDepartamento').val()),
+            "descripcion": "",
+            "departamentos": []
+        },
+        salarioBase: $('#txtSalarioBase').val(),
+        noFaltas: $('#txtNoFaltas').val(),
+        imagen: $('#imgEmpleado').val()
+    };
+
+    console.log("JSON ENVIADO Update:", empleado);
+
+    $.ajax({
+        type: 'PUT',
+        url: 'http://localhost:5186/api/EmpleadoAPI/Update',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(empleado),
+        success: function (result) { //200 OK
+            console.log('Entro al success Update');
+            console.log(result);
+
+            if (result.correct === true) {
+                alert('Se actualizo exitosamente el empleado.');
+
+                //Guardo mi modal en una variable.
+                const modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+                //Lo oculto ya con los datos cargados.
+                modal.hide();
+
+                //Elimino datos del formulario.
+                eliminarDatosFormulario();
+
+                GetAll();
+            }
+
+        },
+        error: function (result) {
+            alert('Error al Actualizar el empleado.' + result.ErrorMessage);
+        }
+    });
+
+}; //UpdateEmpleado
+
 
 //Cargo los datos en mi formulario
 function cargarDatosFormulario(data) {
@@ -187,5 +316,62 @@ function cargarDatosFormulario(data) {
     if ($("#txtNoFaltas").length) {
         $("#txtNoFaltas").val(data.noFaltas || '');
     }
+
+    // LOGICA PARA CARGAR LA IMAGEN
+    var imagenBase64 = data.imagen64;
+    var imagenElemento = $('#imgUsuario');
+
+    if (imagenBase64) {
+        // Si existe la Base64, construimos el Data URL
+        // El navegador espera el formato: data:image/[tipo_mime];base64,[cadena_base64]
+        var imageSrc = "data:image/*;base64," + imagenBase64;
+        imagenElemento.attr('src', imageSrc);
+    } else {
+        // Si no hay Base64, asignamos la imagen por defecto
+        imagenElemento.attr('src', '/Img/NoPhoto.png');
+    }
 }
 
+function eliminarDatosFormulario() {
+
+    const formElement = document.getElementById("formEmpleado");
+    formElement.reset();
+}
+
+/**
+ * Verifica si hay una nueva imagen y la convierte a Base64.
+ * @param {function(string | null): void} callback - Función que recibe la cadena Base64 (o null).
+ */
+function manejarImagenYContinuar(callback) {
+    
+    var fileInput = $('input[name="ImageFile"]')[0];
+
+    // 2. VERIFICAR SI HAY UN ARCHIVO ADJUNTO
+    if (fileInput.files.length > 0) {
+
+        // CASO CONTRARIO: El usuario subió una imagen. Convertir a Base64.
+        var archivo = fileInput.files[0];
+        var reader = new FileReader();
+        reader.onload = function (evento) {
+
+            // Elimina el prefijo Data URL ('data:image/*;base64,')
+            var base64String = evento.target.result.split(',')[1];
+
+            // Retornamos la cadena Base64 al callback
+            callback(base64String);
+        };
+
+        reader.onerror = function () {
+            console.error("Error al leer el archivo. Enviando null.");
+            callback(null);
+        };
+
+        reader.readAsDataURL(archivo);
+
+    } else {
+        callback(null);
+    }
+}
+function RedireccionarAForm() {
+    window.location.href = "/EmpleadoAJAX/FormAJAX";
+}

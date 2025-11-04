@@ -1,0 +1,102 @@
+﻿@model ML.Empleado
+@{
+    ViewData["Title"] = "FormAJAX";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <form id="formEmpleado" method="post" enctype="multipart/form-data">
+            <div class="col-md-12">
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h2 class="display-3">Formulario de Empleados AJAX</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="hidden" id="IdEmpleado" name="IdEmpleado" value="" />
+
+                                <label class="form-label fw-bold" id="lblNombre">Nombre</label>
+                                <input type="text" id="txtNombre" name="Nombre" class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="txtApellidoPaterno" class="form-label fw-bold" id="lblApellidoPaterno">Apellido Paterno</label>
+                                <input type="text" id="txtApellidoPaterno" name="ApellidoPaterno" class="form-control" value="" />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="txtApellidoMaterno" class="form-label fw-bold" id="lblApellidoMaterno">Apellido Materno</label>
+                                <input type="text" id="txtApellidoMaterno" name="ApellidoMaterno" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-4">
+                                <label for="txtFechaNacimiento" class="form-label fw-bold" id="lblFechaNacimiento">Fecha Nacimiento</label>
+                                <input type="text" id="txtFechaNacimiento" name="FechaNacimiento" class="form-control" value="" />
+                                <div id="" class="form-text">
+                                    Formato de Fecha 12-09-2025
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="txtRFC" class="form-label fw-bold" id="lblRFC">RFC</label>
+                                <input type="text" id="txtRFC" name="RFC" class="form-control" value="" />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="txtNSS" class="form-label fw-bold" id="lblNSS">NSS</label>
+                                <input type="text" id="txtNSS" name="NSS" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-4">
+                                <label for="txtCURP" class="form-label fw-bold" id="lblCURP">CURP</label>
+                                <input type="text" id="txtCURP" name="CURP" class="form-control" value="" />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="txtFechaIngreso" class="form-label fw-bold" id="lblFechaIngreso">Fecha Ingreso</label>
+                                <input type="text" id="txtFechaIngreso" name="FechaIngreso" class="form-control" value="" />
+                                <div id="" class="form-text">
+                                    Formato de Fecha 12-09-2025
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="txtIdDepartamento" class="form-label fw-bold" id="lblIdDepartamento">Departamento</label>
+                                <input type="number" id="txtIdDepartamento" name="Departamento.IdDepartamento" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <label for="txtSalarioBase" class="form-label fw-bold" id="lblSalarioBase">Salario Base</label>
+                                <input type="number" step="0.01" id="txtSalarioBase" name="SalarioBase" class="form-control" value="" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="txtNoFaltas" class="form-label fw-bold" id="lblNoFaltas">No. Faltas</label>
+                                <input type="number" id="txtNoFaltas" name="NoFaltas" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="input-group mx-auto" style="width: fit-content;">
+                                    <input type="file" class="form-control mt-4" name="ImageFile" onchange="PrevisualizarImagen(event)">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <img class="mt-4 rounded d-block mx-auto" src="/Img/NoPhoto.png" id="imgEmpleado" width="150px" height="150px" />
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <button class="btn btn-outline-success" type="button" onclick="">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <a href="/EmpleadoAJAX/GetAllAJAX" class="btn btn-outline-danger m-2 px-4 py-2">Regresar</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="~/js/Empleado.js"></script>

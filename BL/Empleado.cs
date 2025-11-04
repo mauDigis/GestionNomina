@@ -279,7 +279,7 @@ namespace BL
         }
 
 
-        #region MÉTODOS DE MIS APIS
+        #region MÉTODOS DE MIS APIS Empleado
 
         public static ML.Result GetAllAPI()
         {

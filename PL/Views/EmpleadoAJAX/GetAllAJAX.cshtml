@@ -1,0 +1,165 @@
+﻿@{
+    ViewData["Title"] = "GetAllAJAX";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="display-4 text-center">GetAll AJAX</h1>
+
+<div class="container">
+    <div class="row text-center">
+        <div class="row m-3">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
+                    <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+                    <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5" />
+                </svg> Agregar Empleado
+            </button>
+        </div>
+        <div class="table-responsive">
+            <table class="table" id="tableEmployees">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>IdEmpleado</th>
+                        <th>Nombre Completo</th>
+                        <th>Fecha Nacimiento</th>
+                        <th>RFC</th>
+                        <th>NSS</th>
+                        <th>CURP</th>
+                        <th>Fecha Ingreso</th>
+                        <th>Departamento</th>
+                        <th>Salario Base</th>
+                        <th>No. Faltas</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <!--Datos insertados dinamicamente por las peticiones AJAX-->
+
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 50%;">
+        <div class="modal-content bg-bold">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-center fw-bold text-white" id="staticBackdropLabel">Form Empleado</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <form id="formEmpleado" method="post" enctype="multipart/form-data">
+                            <div class="col-md-12">
+                                <div class="card text-center">
+                                    <div class="card-header">
+                                        <h2 class="display-3">Formulario de Empleados AJAX</h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="hidden" id="IdEmpleado" name="IdEmpleado"/>
+
+                                                <label class="form-label fw-bold" id="lblNombre">Nombre</label>
+                                                <input type="text" id="txtNombre" name="Nombre" class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="txtApellidoPaterno" class="form-label fw-bold" id="lblApellidoPaterno">Apellido Paterno</label>
+                                                <input type="text" id="txtApellidoPaterno" name="ApellidoPaterno" class="form-control" value="" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="txtApellidoMaterno" class="form-label fw-bold" id="lblApellidoMaterno">Apellido Materno</label>
+                                                <input type="text" id="txtApellidoMaterno" name="ApellidoMaterno" class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col-md-4">
+                                                <label for="txtFechaNacimiento" class="form-label fw-bold" id="lblFechaNacimiento">Fecha Nacimiento</label>
+                                                <input type="text" id="txtFechaNacimiento" name="FechaNacimiento" class="form-control" value="" />
+                                                <div id="" class="form-text">
+                                                    Formato de Fecha 2025-11-14
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="txtRFC" class="form-label fw-bold" id="lblRFC">RFC</label>
+                                                <input type="text" id="txtRFC" name="RFC" class="form-control" value="" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="txtNSS" class="form-label fw-bold" id="lblNSS">NSS</label>
+                                                <input type="text" id="txtNSS" name="NSS" class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col-md-4">
+                                                <label for="txtCURP" class="form-label fw-bold" id="lblCURP">CURP</label>
+                                                <input type="text" id="txtCURP" name="CURP" class="form-control" value="" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="txtFechaIngreso" class="form-label fw-bold" id="lblFechaIngreso">Fecha Ingreso</label>
+                                                <input type="text" id="txtFechaIngreso" name="FechaIngreso" class="form-control" value="" />
+                                                <div id="" class="form-text">
+                                                    Formato de Fecha 2025-12-20
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="txtIdDepartamento" class="form-label fw-bold" id="lblIdDepartamento">Departamento</label>
+                                                <input type="number" id="txtIdDepartamento" name="Departamento.IdDepartamento" class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col-md-6">
+                                                <label for="txtSalarioBase" class="form-label fw-bold" id="lblSalarioBase">Salario Base</label>
+                                                <input type="number" step="0.01" id="txtSalarioBase" name="SalarioBase" class="form-control" value="" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="txtNoFaltas" class="form-label fw-bold" id="lblNoFaltas">No. Faltas</label>
+                                                <input type="number" id="txtNoFaltas" name="NoFaltas" class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col-md-6">
+                                                <div class="input-group mx-auto" style="width: fit-content;">
+                                                    <input id="imgEmpleado" type="file" class="form-control mt-4" name="ImageFile" onchange="PrevisualizarImagen(event)">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <img class="mt-4 rounded d-block mx-auto" src="/Img/NoPhoto.png" id="imgUsuario" width="150px" height="150px" />
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col-md-12">
+                                                <button class="btn btn-outline-success" type="button" onclick="SaveEmpleado()">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer text-muted">
+                                        <a href="/EmpleadoAJAX/GetAllAJAX" class="btn btn-outline-danger m-2 px-4 py-2">Regresar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" onclick="eliminarDatosFormulario()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
+                        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                    </svg> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="~/js/Empleado.js"></script>

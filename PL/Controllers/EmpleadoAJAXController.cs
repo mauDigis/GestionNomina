@@ -4,14 +4,10 @@ namespace PL.Controllers
 {
     public class EmpleadoAJAXController : Controller
     {
-        public IActionResult GetAll()
-        {
-            return View();
-        }
-
-        public IActionResult Form()
+        public IActionResult GetAllAJAX()
         {
             return View();
         }
     }
 }
+
