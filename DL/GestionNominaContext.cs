@@ -28,12 +28,6 @@ public partial class GestionNominaContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //Se construye mi DTO.
-        modelBuilder.Entity<EmpleadosDTO>(entity =>
-        {
-            entity.HasNoKey();
-
-        });
 
         modelBuilder.Entity<Departamento>(entity =>
         {
