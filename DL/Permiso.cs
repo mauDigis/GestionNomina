@@ -25,6 +25,8 @@ public partial class Permiso
 
     public int? IdAutorizador { get; set; }
 
+    public virtual ICollection<HistorialPermiso> HistorialPermisos { get; set; } = new List<HistorialPermiso>();
+
     public virtual Empleado? IdAutorizadorNavigation { get; set; }
 
     public virtual Empleado? IdEmpleadoNavigation { get; set; }

@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BL
 {
@@ -208,19 +204,30 @@ namespace BL
                 using (DL.GestionNominaContext context = new DL.GestionNominaContext())
                 {
                     var queryUpdPermiso = (from PermisoDb in context.Permisos
-                                       where PermisoDb.IdPermiso == permiso.IdPermiso
-                                       select PermisoDb).SingleOrDefault();
+                                           where PermisoDb.IdPermiso == permiso.IdPermiso
+                                           select PermisoDb).SingleOrDefault();
 
                     if (queryUpdPermiso != null)
                     {
                         queryUpdPermiso.IdStatusPermiso = permiso.StatusPermiso.IdStatusPermiso;
                         queryUpdPermiso.IdAutorizador = permiso.IdAutorizador;
-                        
+
                         int RowsAffected = context.SaveChanges();
 
                         if (RowsAffected > 0)
                         {
-                            resultUpdPermiso.Correct = true;
+                            //Mandar a llamar mi stored procedure de HistorialPermiso
+                            int QueryHistorialUpd = context.Database.ExecuteSqlInterpolated($@"
+                             EXECUTE HistorialPermisoUpdate
+                               @IdPermiso = {permiso.IdPermiso},
+                               @NuevoStatusId = {queryUpdPermiso.IdStatusPermiso},
+                               @NuevoAutorizadorId = {queryUpdPermiso.IdAutorizador}
+                            ");
+
+                            if(QueryHistorialUpd > 0)
+                            {
+                                resultUpdPermiso.Correct = true;
+                            }
                         }
                         else
                         {
@@ -282,7 +289,7 @@ namespace BL
                 using (DL.GestionNominaContext context = new DL.GestionNominaContext())
                 {
                     var QueryAutorizador = (from EmpleadoDb in context.Empleados
-                                            where EmpleadoDb.IdEmpleado == IdAutorizador 
+                                            where EmpleadoDb.IdEmpleado == IdAutorizador
                                             select new
                                             {
                                                 EmpleadoDb.Nombre,
@@ -299,7 +306,7 @@ namespace BL
                         permisoML.Autoriza.ApellidoPaterno = QueryAutorizador.ApellidoPaterno;
                         permisoML.Autoriza.ApellidoMaterno = QueryAutorizador.ApellidoMaterno;
 
-                        resultGetByIdAutoriza.Object = permisoML; 
+                        resultGetByIdAutoriza.Object = permisoML;
                         resultGetByIdAutoriza.Correct = true;
                     }
                     else

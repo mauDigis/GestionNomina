@@ -66,5 +66,25 @@ namespace SL.Controllers
                 return BadRequest("No se elimino el permisos");
             }
         }
+
+        #region HISTORIAL DE PERMISOS
+
+        [HttpGet("GetAll/HistorialPermisos")]
+        public ActionResult<ML.Result> GetAllHistorialPermisos()
+        {
+            ML.Result resultGetAllHistorial = BL.HistorialPermiso.GetAll();
+
+            if (resultGetAllHistorial.Correct == true)
+            {
+                return Ok(resultGetAllHistorial);
+            }
+            else
+            {
+                return BadRequest("No se encontro ningun historial de permisos");
+            }
+        }
+
+        #endregion
+
     }
 }

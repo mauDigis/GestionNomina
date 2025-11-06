@@ -9,5 +9,7 @@ public partial class StatusPermiso
 
     public string? Descripcion { get; set; }
 
+    public virtual ICollection<HistorialPermiso> HistorialPermisos { get; set; } = new List<HistorialPermiso>();
+
     public virtual ICollection<Permiso> Permisos { get; set; } = new List<Permiso>();
 }

@@ -170,7 +170,48 @@ namespace PL.Controllers
         [HttpGet]
         public IActionResult HistorialPermisos()
         {
-            return View();
+            #region CONSUMO DE SERVICIO GETALLHistorialPermisos
+
+            ML.Result resultHistorialPermisos = new ML.Result();
+
+            resultHistorialPermisos.Objects = new List<object>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:5186/api/PermisoAPI/");
+                var responseTask = client.GetAsync("GetAll/HistorialPermisos");
+                responseTask.Wait(); //peticion 
+                var result = responseTask.Result; //guardo mi result
+
+                if (result.IsSuccessStatusCode)
+                { 
+                    var readTask = result.Content.ReadFromJsonAsync<ML.Result>(); //leo json y lo convierto a result
+                    readTask.Wait();
+
+                    foreach (var resultItem in readTask.Result.Objects)
+                    {
+                        ML.HistorialPermiso resultItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<ML.HistorialPermiso>(resultItem.ToString()); //deserealiza a mi modelo de Usuario
+                        resultHistorialPermisos.Objects.Add(resultItemList);
+                    }
+                    resultHistorialPermisos.Correct = true;
+                }
+                else
+                {
+                    resultHistorialPermisos.Correct = false;
+                    resultHistorialPermisos.ErrorMessage = "No se encontro historial de permisos.";
+                }
+            }
+
+            #endregion
+
+            ML.HistorialPermiso historialPermiso = new ML.HistorialPermiso();   
+
+            if (resultHistorialPermisos.Correct == true)
+            {
+                historialPermiso.ListaHistorialPermisos = resultHistorialPermisos.Objects;
+            }
+
+            return View(historialPermiso);
         }
 
     }

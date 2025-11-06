@@ -1,0 +1,67 @@
+﻿@model ML.HistorialPermiso
+@{
+    ViewData["Title"] = "HistorialPermisos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="display-4 text-center">Historial de Permisos</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-responsive text-center mt-3">
+
+                @if (Model.ListaHistorialPermisos != null)
+                {
+                    <div class="alert alert-success d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
+                        <div>
+                            Se obtuvo el historial de permisos:
+                        </div>
+                    </div>
+
+                    <table class="table">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>IdHistorialPermiso</th>
+                                <th>IdPermiso</th>
+                                <th>FechaRevision</th>
+                                <th>Estatus</th>
+                                <th>Observaciones</th>
+                                <th>Aturizo</th>
+                            </tr>
+                        </thead>
+                        <tbody class="">
+                            @foreach (ML.HistorialPermiso historialPermiso in Model.ListaHistorialPermisos)
+                            {
+                                <tr>
+                                    <td>@historialPermiso.IdHistorialPermiso</td>
+
+                                    <td>@historialPermiso.Permiso.IdPermiso</td>
+
+                                    <td>@historialPermiso.FechaRevision</td>
+
+                                    <td>@historialPermiso.StatusPermiso.Descripcion</td>
+
+                                    <td>@historialPermiso.Observaciones</td>
+
+                                    <td>@historialPermiso.Autoriza.Nombre @historialPermiso.Autoriza.ApellidoPaterno @historialPermiso.Autoriza.ApellidoMaterno</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-danger">
+                        No se obtuvo el Historial de Permisos. Error: @ViewBag.Message
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+

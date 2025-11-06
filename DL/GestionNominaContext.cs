@@ -19,6 +19,8 @@ public partial class GestionNominaContext : DbContext
 
     public virtual DbSet<Empleado> Empleados { get; set; }
 
+    public virtual DbSet<HistorialPermiso> HistorialPermisos { get; set; }
+
     public virtual DbSet<Permiso> Permisos { get; set; }
 
     public virtual DbSet<Rol> Rols { get; set; }
@@ -27,9 +29,8 @@ public partial class GestionNominaContext : DbContext
 
     //Definicion de DTOs
     public virtual DbSet<EmpleadosDTO> EmpleadosDTOs { get; set; }
-
     public virtual DbSet<PermisosDTOs> PermisosDTOs { get; set; }
-
+    public virtual DbSet<HistorialPermisosDTO> HistorialPermisosDTOs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -37,12 +38,20 @@ public partial class GestionNominaContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //Definimos que no tienen llave primaria, campos ni son tablas.
+
         modelBuilder.Entity<EmpleadosDTO>(entity =>
         {
             entity.HasNoKey();
         });
 
         modelBuilder.Entity<PermisosDTOs>(entity =>
+        {
+            entity.HasNoKey();
+
+        });
+
+        modelBuilder.Entity<HistorialPermisosDTO>(entity =>
         {
             entity.HasNoKey();
 
@@ -91,6 +100,29 @@ public partial class GestionNominaContext : DbContext
             entity.HasOne(d => d.IdDepartamentoNavigation).WithMany(p => p.Empleados)
                 .HasForeignKey(d => d.IdDepartamento)
                 .HasConstraintName("FK__Empleado__IdDepa__1273C1CD");
+        });
+
+        modelBuilder.Entity<HistorialPermiso>(entity =>
+        {
+            entity.HasKey(e => e.IdHistorialPermiso).HasName("PK__Historia__0000E4BF86958794");
+
+            entity.ToTable("HistorialPermiso");
+
+            entity.Property(e => e.Observaciones)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.IdAutorizadorNavigation).WithMany(p => p.HistorialPermisos)
+                .HasForeignKey(d => d.IdAutorizador)
+                .HasConstraintName("FK__Historial__IdAut__3C69FB99");
+
+            entity.HasOne(d => d.IdPermisoNavigation).WithMany(p => p.HistorialPermisos)
+                .HasForeignKey(d => d.IdPermiso)
+                .HasConstraintName("FK__Historial__IdPer__3A81B327");
+
+            entity.HasOne(d => d.IdStatusPermisoNavigation).WithMany(p => p.HistorialPermisos)
+                .HasForeignKey(d => d.IdStatusPermiso)
+                .HasConstraintName("FK__Historial__IdSta__3B75D760");
         });
 
         modelBuilder.Entity<Permiso>(entity =>

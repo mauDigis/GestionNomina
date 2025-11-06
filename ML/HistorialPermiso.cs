@@ -14,5 +14,6 @@ namespace ML
         public ML.StatusPermiso? StatusPermiso { get; set; }
         public string? Observaciones { get; set; }
         public ML.Empleado? Autoriza { get; set; }
+        public List<object>? ListaHistorialPermisos { get; set; }
     }
 }

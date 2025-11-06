@@ -31,6 +31,8 @@ public partial class Empleado
 
     public byte[]? Imagen { get; set; }
 
+    public virtual ICollection<HistorialPermiso> HistorialPermisos { get; set; } = new List<HistorialPermiso>();
+
     public virtual Departamento? IdDepartamentoNavigation { get; set; }
 
     public virtual ICollection<Permiso> PermisoIdAutorizadorNavigations { get; set; } = new List<Permiso>();
