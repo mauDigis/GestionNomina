@@ -27,6 +27,8 @@ public partial class GestionNominaContext : DbContext
 
     public virtual DbSet<StatusPermiso> StatusPermisos { get; set; }
 
+    public virtual DbSet<Usuario> Usuarios { get; set; }
+
     //Definicion de DTOs
     public virtual DbSet<EmpleadosDTO> EmpleadosDTOs { get; set; }
     public virtual DbSet<PermisosDTOs> PermisosDTOs { get; set; }
@@ -38,8 +40,6 @@ public partial class GestionNominaContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //Definimos que no tienen llave primaria, campos ni son tablas.
-
         modelBuilder.Entity<EmpleadosDTO>(entity =>
         {
             entity.HasNoKey();
@@ -129,7 +129,7 @@ public partial class GestionNominaContext : DbContext
         {
             entity.HasKey(e => e.IdPermiso).HasName("PK__Permiso__0D626EC8B2BE553C");
 
-            entity.ToTable("Permiso");
+            entity.ToTable("Permiso", tb => tb.HasTrigger("TR_Permiso_InsertarHistorial"));
 
             entity.Property(e => e.FechaFin).HasColumnName("FechaFIN");
             entity.Property(e => e.Motivo)
@@ -169,6 +169,28 @@ public partial class GestionNominaContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(20)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<Usuario>(entity =>
+        {
+            entity.HasKey(e => e.IdUsuario).HasName("PK__Usuario__5B65BF9702DD685E");
+
+            entity.ToTable("Usuario");
+
+            entity.Property(e => e.NombreUsuario)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.PasswordHash)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.IdEmpleadoNavigation).WithMany(p => p.Usuarios)
+                .HasForeignKey(d => d.IdEmpleado)
+                .HasConstraintName("FK__Usuario__IdEmple__5441852A");
+
+            entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.Usuarios)
+                .HasForeignKey(d => d.IdRol)
+                .HasConstraintName("FK__Usuario__IdRol__5535A963");
         });
 
         OnModelCreatingPartial(modelBuilder);
