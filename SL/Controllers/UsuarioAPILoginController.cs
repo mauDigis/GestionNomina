@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,13 +13,13 @@ namespace SL.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsuarioLoginController : ControllerBase
+    public class UsuarioAPILoginController : ControllerBase
     {
 
         //Inyeccion de dependencias de mi BL
         private readonly BL.Usuario _usuarioService;
         private readonly IConfiguration _configuration;
-        public UsuarioLoginController(BL.Usuario usuarioService, IConfiguration configuration)
+        public UsuarioAPILoginController(BL.Usuario usuarioService, IConfiguration configuration)
         {
             _usuarioService = usuarioService;
 
@@ -44,6 +45,10 @@ namespace SL.Controllers
         //}
 
         [HttpPost("Login")]
+        [AllowAnonymous]
+        //[AllowAnonymous] Permite el acceso de los usuarios no autenticados a acciones individuales.
+
+        //[Authorize] Especifica que la clase o el método a los que se aplica este atributo requiere la autorización especificada.
         public IActionResult Login([FromBody] ML.Usuario usuario)
         {
             ML.Result resultUser = _usuarioService.GetUserByNameAndPassword(usuario);
@@ -52,19 +57,20 @@ namespace SL.Controllers
             {
                 ML.Usuario usuarioCorrect = (ML.Usuario)resultUser.Object;
 
-                if (usuarioCorrect.Rol.Descripcion == "Administrador" && usuarioCorrect.PasswordHash == "oroblanco")
-                {
-                    var token = GenerateJwtToken(usuarioCorrect.NombreUsuario, usuarioCorrect.PasswordHash, usuarioCorrect.Rol.Descripcion);
-                    return Ok(new { token });
-                }
+                var token = GenerateJwtToken(usuarioCorrect);
+
+                resultUser.Object = token;
+                return Ok(resultUser);
             }
 
-            return Unauthorized();
+            return Unauthorized(new
+            {
+                Message = "Credenciales incorrectas. Verifique su nombre de usuario y contraseña."
+            });
         }
 
-        private string GenerateJwtToken(string NombreUsuario, string PasswordHash, string RolDescripcion)
+        private string GenerateJwtToken(ML.Usuario usuarioCorrect)
         {
-
             // Obtener la clave secreta de la configuración
             var jwtKey = _configuration["Jwt:Key"];
 
@@ -74,11 +80,9 @@ namespace SL.Controllers
 
             var claims = new[]
             {
-            new Claim(ClaimTypes.Name, NombreUsuario),
-            new Claim(ClaimTypes.Name, PasswordHash),
-            new Claim(ClaimTypes.Role, RolDescripcion),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+                new Claim(ClaimTypes.NameIdentifier, usuarioCorrect.IdUsuario.ToString()),
+                new Claim(ClaimTypes.Role, usuarioCorrect.Rol.Descripcion)
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

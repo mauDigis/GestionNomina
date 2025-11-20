@@ -15,7 +15,7 @@ namespace PL.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Login", "Usuario");
         }
 
         public IActionResult Privacy()

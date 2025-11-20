@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PL.Controllers
 {
+
+    [Authorize(Roles = "Administrador")]
     public class EmpleadoController : Controller
     {
         private readonly IWebHostEnvironment _env;
@@ -33,6 +36,7 @@ namespace PL.Controllers
         }
 
         [HttpGet]
+        //[Authorize(Roles = "Administrador")]
         public IActionResult Form(int? IdEmpleado) 
         {
             ML.Empleado empleado = new ML.Empleado();

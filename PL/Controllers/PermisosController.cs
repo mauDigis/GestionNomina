@@ -1,10 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Http;
 
 namespace PL.Controllers
 {
+    
     public class PermisosController : Controller
     {
         [HttpGet]
+        [Authorize(Roles = "Administrador")]
         public IActionResult GetAllSolicitudes()
         {
             #region CONSUMO DE SERVICIO GETALL
@@ -13,8 +19,17 @@ namespace PL.Controllers
 
             resultPermiso.Objects = new List<object>();
 
+            //Recupero mi Token de mi Cookie
+            string jwtToken = Request.Cookies["JwtToken"];
+
             using (var client = new HttpClient())
             {
+                // Limpio las cabeceras
+                client.DefaultRequestHeaders.Clear();
+
+                // Añadir la cabecera Authorization con el prefijo "Bearer"
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+
                 client.BaseAddress = new Uri("http://localhost:5186/api/PermisoAPI/");
                 var responseTask = client.GetAsync("GetAll");
                 responseTask.Wait(); //peticion 
@@ -32,6 +47,14 @@ namespace PL.Controllers
                         resultPermiso.Objects.Add(resultItemList);
                     }
                     resultPermiso.Correct = true;
+                }
+                else if (result.StatusCode == HttpStatusCode.Unauthorized || result.StatusCode == HttpStatusCode.Forbidden)
+                {
+                    // El token fue rechazado por la API (SL)
+                    ViewBag.ErrorMessage = "El token no tiene permisos o expiró.";
+
+                    // Opcional: Limpiar cookie y redirigir a login
+                    return RedirectToAction("Login", "Usuario");
                 }
                 else
                 {
@@ -53,12 +76,14 @@ namespace PL.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrador,Empleado")]
         public IActionResult SolicitudForm()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador,Empleado")]
         public IActionResult SolicitudForm(ML.Permiso permiso)
         {
             // 1. Obtiene el DateTime del día de hoy
@@ -110,6 +135,7 @@ namespace PL.Controllers
             return View(permiso);
         }
 
+        [Authorize(Roles = "Administrador")]
         public IActionResult ActualizarStatus(int? IdPermiso, byte? IdStatusPermiso)
         {
             ML.Permiso permiso = new ML.Permiso();
@@ -168,6 +194,7 @@ namespace PL.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrador,Empleado")]
         public IActionResult HistorialPermisos()
         {
             #region CONSUMO DE SERVICIO GETALLHistorialPermisos

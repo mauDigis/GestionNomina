@@ -38,7 +38,6 @@ namespace BL
                     {
                         IdUsuario = queryUser.UsuarioBD.IdUsuario,
                         NombreUsuario = queryUser.UsuarioBD.NombreUsuario,
-                        PasswordHash = queryUser.UsuarioBD.PasswordHash,
 
                         Rol = new ML.Rol()
                         {

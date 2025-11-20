@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SL.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Administrador")]
     public class PermisoAPIController : ControllerBase
     {
         [HttpGet("GetAll")]
+        
         public ActionResult<ML.Result> GetAll()
         {
             ML.Result resultGetAll = BL.Permiso.GetAll();
@@ -23,6 +26,7 @@ namespace SL.Controllers
         }
 
         [HttpPost("Add")]
+        [Authorize(Roles = "Empleado")]
         public ActionResult<ML.Result> Add(ML.Permiso permiso)
         {
             ML.Result resultAdd = BL.Permiso.Add(permiso);

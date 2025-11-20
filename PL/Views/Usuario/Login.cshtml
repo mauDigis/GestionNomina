@@ -4,67 +4,72 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="display-4 text-center">Iniciar Sesion</h1>
+@{
+    string errorMessage = ViewBag.ErrorMessage as string;
+}
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Iniciar Sesión
-</button>
+@*
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    // 2. Si hay un mensaje, renderizamos un alerta de Bootstrap
+    <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+        <strong>Error:</strong> @errorMessage
+       
+        @* Botón para cerrar la alerta 
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+}
+*@
 
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Iniciar Sesión</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                @using (Html.BeginForm("Login", "Usuario", FormMethod.Post))
+
+<h1 class="display-4 text-center">Inicio de Sesión</h1>
+
+<div class="d-flex justify-content-center align-items-center min-vh-95 bg-gray-100 mt-5 mb-5">
+    <div class="card shadow-lg p-4" style="max-width: 400px; width: 90%;">
+
+        <!-- Contenedor de la imagen centrado y con tamaño ajustado -->
+        <div class="text-center mb-4">
+            <img src="~/Img/NoPhoto.png"
+                 class="img-fluid rounded-full mx-auto"
+                 alt="Inicio de Sesión"
+                 style="width: 120px; height: 120px; object-fit: cover; border: 4px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card-body">
+            @using (Html.BeginForm("Login", "Usuario", FormMethod.Post))
+            {
+                <div class="text-center">
+                    <p class="mb-4 text-muted">Ingresa tus credenciales para continuar:</p>
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.NombreUsuario, "Email", new { @class = "form-label fw-bold" })
+                    @Html.TextBoxFor(model => model.NombreUsuario, new { @class = "form-control", @id = "txtNombreUsuario", placeholder = "Tu correo o nombre de usuario" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.PasswordHash, "Contraseña", new { @class = "form-label fw-bold" })
+                    @Html.TextBoxFor(model => model.PasswordHash, new { @class = "form-control", @id = "txtPasswordHash", type = "password", placeholder = "********" })
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button class="btn btn-primary" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-right me-2" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0z" />
+                            <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+                        </svg>
+                        Iniciar Sesión
+                    </button>
+                </div>
+
+                @if (!string.IsNullOrEmpty(errorMessage))
                 {
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">@* 
-                                <div class="row">
-
-                                    <p>Ingresa tus credenciales: </p>
-
-                                    @Html.LabelFor(model => model.NombreUsuario, "Email", new { @class = "form-label  fw-bold text-center" })
-                                    @Html.TextBoxFor(model => model.NombreUsuario, new { @class = "form-control text-center", @id = "txtNombreUsuario" })
-
-                                    @Html.LabelFor(model => model.PasswordHash, "Contraseña", new { @class = "form-label  fw-bold text-center mt-3" })
-                                    @Html.TextBoxFor(model => model.PasswordHash, new { @class = "form-control text-center", @id = "txtPasswordHash", type = "password" })
-
-                                </div> *@
-
-                                <div class="row justify-content-center">
-                                    <div class="col-12 col-md-8">
-                                        <p class="text-center mb-4 text-muted">Ingresa tus credenciales para continuar:</p> <div class="mb-3">
-                                            @Html.LabelFor(model => model.NombreUsuario, "Email", new { @class = "form-label fw-bold" })
-                                            @Html.TextBoxFor(model => model.NombreUsuario, new { @class = "form-control", @id = "txtNombreUsuario", placeholder = "Tu correo o nombre de usuario" })
-                                        </div>
-
-                                        <div class="mb-3">
-                                            @Html.LabelFor(model => model.PasswordHash, "Contraseña", new { @class = "form-label fw-bold" }) 
-                                            @Html.TextBoxFor(model => model.PasswordHash, new { @class = "form-control", @id = "txtPasswordHash", type = "password", placeholder = "********" })
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-outline-success" type="submit">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0z" />
-                                <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
-                            </svg>
-                            Iniciar Sesión
-                        </button>
+                    <div class="alert alert-danger alert-dismissible fade show text-center mt-3" role="alert">
+                        <strong>Error:</strong> @errorMessage
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 }
-            </div>
+            }
         </div>
     </div>
 </div>

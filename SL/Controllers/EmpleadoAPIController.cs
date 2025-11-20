@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SL.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize] Permite acceder mientras el usuario tenga un token, independiente de su rol.
     public class EmpleadoAPIController : ControllerBase
     {
         [HttpGet("GetAll")]
+        [Authorize(Roles = "Administrador")]
         public ActionResult<ML.Result> GetAll()
         {
             ML.Result resultGetAll = BL.Empleado.GetAll();

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Img\PlantillaCorreo.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -24,6 +28,10 @@
     <ProjectReference Include="..\BL\BL.csproj" />
     <ProjectReference Include="..\ML\ML.csproj" />
     <ProjectReference Include="..\SL\SL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Content\" />
   </ItemGroup>
 
 </Project>
